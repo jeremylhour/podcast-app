@@ -76,12 +76,12 @@ if __name__=='__main__':
     newEpisode = next(history)
     
     # Play the podcast
-    player = vlc.MediaPlayer(aa.audioUrl)
+    player = vlc.MediaPlayer(newEpisode.audioUrl)
     player.play()
     player.get_time()
     player.set_time(15830)
     
-    stopListening(aa, player)
-    resumeListening(aa, player)
+    stopListening(newEpisode, player)
+    resumeListening(newEpisode, player)
     
     jumpTime(player, jump=30)

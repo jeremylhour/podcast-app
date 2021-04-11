@@ -9,3 +9,7 @@ subscriptions:
     Barbell Medicine: https://feeds.soundcloud.com/users/soundcloud:users:284506821/sounds.rss
     You Are Not So Smart: https://youarenotsosmart.com/rss-2/
     Jocko Podcast: http://jockopodcast.libsyn.com/rss
+
+params:
+    database_dir: .database
+    database_file: read_episodes.json

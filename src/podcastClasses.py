@@ -12,6 +12,9 @@ import feedparser
 import time
 from datetime import datetime
 
+from tinydb import Query
+
+from database import getDataBase
 
 # --------------------------
 # Object classes definition 
@@ -68,6 +71,30 @@ class Episode():
         self.summary = summary
         self.audioUrl = audioUrl
         self.timestamp = 0
+        
+    def toDict(self):
+        """
+        toDict:
+            passes arg to dict, so it can be saved to database
+        """
+        dico = {'podcastName': self.podcastName,
+                'title': self.title,
+                'date': self.date.strftime("%d/%m/%Y, %H:%M:%S"),
+                'audioUrl': self.audioUrl,
+                'timestamp': self.timestamp
+                }
+        return dico
+        
+    def saveToDataBase(self):
+        """
+        saveToDataBase:
+            save the current episode to database
+        """
+        db = getDataBase()
+        dico = self.toDict()
+        User = Query()
+        db.upsert(dico, User.audioUrl == self.audioUrl)
+        
     
     def updateTimestamp(self, newTimestamp):
         """
@@ -84,19 +111,6 @@ class Episode():
             reset the timestamp
         """
         self.timestamp = 0
-        
-    def toDict(self):
-        """
-        toDict:
-            passes arg to dict, so it can be saved to database
-        """
-        dico = {'podcastName': self.podcastName,
-                'title': self.title,
-                'date': self.date.strftime("%d/%m/%Y, %H:%M:%S"),
-                'audioUrl': self.audioUrl,
-                'timestamp': self.timestamp
-                }
-        return dico
 
 
 # -------
@@ -118,13 +132,11 @@ def _extractAudioUrl(feedEntry):
 
 
 if __name__=='__main__':
-    config_file = 'subscriptions.yml'
+    config_file = '../subscriptions.yml'
     with open(config_file, 'r') as stream:
         config = yaml.safe_load(stream)
         
-    for podcast in config['subscriptions']:
-        print(podcast)
-        url = config['subscriptions'][podcast]
+    url = config['subscriptions']['Flagrant 2']
         
     podcast = Podcast(url)
     history = podcast.getLastEpisode()
