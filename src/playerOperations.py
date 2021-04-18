@@ -17,7 +17,8 @@ import vlc
 from podcastClasses import Podcast, Episode
 
 # -------------------------------------- 
-# Functions to manage podcast and time
+# Functions to manage podcast and time,
+# including updating the databse
 # --------------------------------------
 
 def stopListening(episode, player):
@@ -31,7 +32,8 @@ def stopListening(episode, player):
     stopTime = player.get_time()
     if player.is_playing()==1:
         player.stop()
-    episode.timestamp = stopTime
+    episode.updateTimestamp(stopTime)
+    episode.saveToDataBase()
     return None
 
 def resumeListening(episode, player):
@@ -45,6 +47,7 @@ def resumeListening(episode, player):
     if player.is_playing()==0:
         player.play()
     player.set_time(episode.timestamp)
+    time.sleep(2) # to let the player resume
     return None
 
 def jumpTime(player, jump=30):
@@ -58,6 +61,8 @@ def jumpTime(player, jump=30):
     if player.is_playing()==1:
         currentTime = player.get_time()
         player.set_time(currentTime + jump*1000)
+    else:
+        print('The podcast is not playing.')
     return None
 
 
@@ -80,8 +85,10 @@ if __name__=='__main__':
     player.play()
     player.get_time()
     player.set_time(15830)
+    time.sleep(5)
     
     stopListening(newEpisode, player)
     resumeListening(newEpisode, player)
     
     jumpTime(player, jump=30)
+    time.sleep(10)

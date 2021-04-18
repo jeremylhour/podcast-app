@@ -16,46 +16,50 @@ from tinydb import Query
 
 from database import getDataBase
 
+
 # --------------------------
-# Object classes definition 
-# --------------------------       
+# Object classes definitions
+# --------------------------
 
 class Podcast():
     """
     Podcast:
         Podcast object, created from url of the RSS feed
     """
-    
+
     def __init__(self, url):
         """
         init the object and directly parse the url
-        
+
         @param url (str): url for the RSS feed of the podcast
         """
         self.url = url
         self.feed = feedparser.parse(self.url)
         self.title = self.feed.feed.get('title')
-    
+
     def getLastEpisode(self):
         """
         getLastEpisode:
-            A generator to get the last episode, goes from more recent to older
+            A generator to get the last episode, goes from most recent to older.
+            Queries the latest timestamp from the database.
         """
         for feedEntry in self.feed.entries:
             publishedDate = datetime.fromtimestamp(time.mktime(feedEntry.published_parsed))
-            podcastEpisode = Episode(podcastName=self.title,
-                                     title=feedEntry['title'],
-                                     date=publishedDate,
-                                     summary=feedEntry['summary'],
-                                     audioUrl=_extractAudioUrl(feedEntry)
-                                     )
+            podcastEpisode = Episode(
+                podcastName=self.title,
+                title=feedEntry['title'],
+                date=publishedDate,
+                summary=feedEntry['summary'],
+                audioUrl=_extractAudioUrl(feedEntry)
+                )
+            podcastEpisode.loadFromDataBase()
             yield podcastEpisode
 
 
 class Episode():
     """
     Episode:
-        A class for episode object
+        A class for episodes from a podcast
     """
     def __init__(self, podcastName, title, date, summary, audioUrl):
         """
@@ -71,20 +75,36 @@ class Episode():
         self.summary = summary
         self.audioUrl = audioUrl
         self.timestamp = 0
-        
+
     def toDict(self):
         """
         toDict:
             passes arg to dict, so it can be saved to database
         """
-        dico = {'podcastName': self.podcastName,
-                'title': self.title,
-                'date': self.date.strftime("%d/%m/%Y, %H:%M:%S"),
-                'audioUrl': self.audioUrl,
-                'timestamp': self.timestamp
-                }
+        dico = {
+            'podcastName': self.podcastName,
+            'title': self.title,
+            'date': self.date.strftime("%d/%m/%Y, %H:%M:%S"),
+            'audioUrl': self.audioUrl,
+            'timestamp': self.timestamp
+            }
         return dico
-        
+
+    def loadFromDataBase(self):
+        """
+        loadFromDataBase:
+            check if the episode already exists in the database,
+            and if so, loads the correct timestamp.
+        """
+        db = getDataBase()
+        User = Query()
+        result = db.search(User.audioUrl == self.audioUrl)
+        if len(result)>0:
+            print("Episode found in the database. Loading timestamp.")
+            self.updateTimestamp(result[0]['timestamp'])
+        else:
+            print("This is a new episode.")
+
     def saveToDataBase(self):
         """
         saveToDataBase:
@@ -93,18 +113,17 @@ class Episode():
         db = getDataBase()
         dico = self.toDict()
         User = Query()
-        db.upsert(dico, User.audioUrl == self.audioUrl)
-        
-    
+        db.upsert(dico, User.audioUrl == self.audioUrl) # audioUrl is the key of the database
+
     def updateTimestamp(self, newTimestamp):
         """
         updateTimestamp:
             update the Timestamp when the podcast stops playing
-            
+
         @param newTimestamp (int): new starting time
         """
         self.timestamp = newTimestamp
-        
+
     def resetTimestamp(self):
         """
         resetTimestamp:
@@ -121,24 +140,33 @@ def _extractAudioUrl(feedEntry):
     """
     extractAudioUrl:
         extract the url of the audio episode from the feed entry
-        
+
     @param feedEntry (dict): a dict that might have an url linking to an audio
     """
     for link in feedEntry['links']:
         if 'audio' in link['type']:
             audioLink = link['href']
     return audioLink
-        
 
 
 if __name__=='__main__':
-    config_file = '../subscriptions.yml'
+    print("="*80)
+    print("THIS IS A TEST")
+    print("="*80)
+
+    config_file = 'subscriptions.yml'
     with open(config_file, 'r') as stream:
         config = yaml.safe_load(stream)
-        
+
     url = config['subscriptions']['Flagrant 2']
-        
     podcast = Podcast(url)
+    print(f'The current podcast is: {podcast.title}')
     history = podcast.getLastEpisode()
-    
+
+    print('Here is the most recent episode')
     newEpisode = next(history)
+    print(newEpisode.title)
+
+    print('Here is the second most recent episode')
+    newEpisode2 = next(history)
+    print(newEpisode2.title)

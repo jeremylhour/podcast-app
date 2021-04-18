@@ -13,18 +13,19 @@ import os
 from tinydb import TinyDB, Query
 
 
-def getDataBase(output_dir='.database'):
+def getDataBase(db_dir='.database/'):
     """
     getDataBase:
-        creates the database if it does not exists
+        gets the database,
+        and creates the database if it does not exists
     
     @param output_dir (str): directory where the database is located
     """
     # Create dir
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    if not os.path.exists(db_dir):
+        os.makedirs(db_dir)
     
-    database = TinyDB(output_dir+'/read_episodes.json')
+    database = TinyDB(db_dir+'read_episodes.json')
     return database
 
 if __name__=='__main__':
