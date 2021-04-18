@@ -98,10 +98,10 @@ class Episode():
         """
         db = getDataBase()
         User = Query()
-        result = db.search(User.audioUrl == self.audioUrl)
-        if len(result)>0:
+        result = db.get(User.audioUrl == self.audioUrl)
+        if result is not None:
             print("Episode found in the database. Loading timestamp.")
-            self.updateTimestamp(result[0]['timestamp'])
+            self.updateTimestamp(result['timestamp'])
         else:
             print("This is a new episode.")
 

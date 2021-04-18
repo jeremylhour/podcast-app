@@ -47,7 +47,7 @@ def resumeListening(episode, player):
     if player.is_playing()==0:
         player.play()
     player.set_time(episode.timestamp)
-    time.sleep(2) # to let the player resume
+    time.sleep(2) # to give time to let the player resume
     return None
 
 def jumpTime(player, jump=30):
@@ -72,7 +72,6 @@ if __name__=='__main__':
         config = yaml.safe_load(stream)
         
     for podcast in config['subscriptions']:
-        print(podcast)
         url = config['subscriptions'][podcast]
         
     podcast = Podcast(url)
