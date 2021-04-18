@@ -76,6 +76,16 @@ class Episode():
         self.audioUrl = audioUrl
         self.timestamp = 0
 
+    def displayInfos(self):
+        """
+        displayInfos:
+            print episode infos to the screen
+        """
+        print('\n')
+        print(f'Title : \n {self.title}')
+        print(f'Date : \n {self.date.strftime("%d/%m/%Y, %H:%M:%S")}')
+        print(f'Summary : \n {self.summary} \n')
+
     def toDict(self):
         """
         toDict:
