@@ -1,3 +1,4 @@
 feedparser
 python-vlc
 tinydb
+docopt
