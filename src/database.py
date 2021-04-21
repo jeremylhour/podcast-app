@@ -13,7 +13,7 @@ import os
 from tinydb import TinyDB, Query
 
 
-def getDataBase(db_dir='.database/'):
+def getDataBase(db_dir='../.database/'):
     """
     getDataBase:
         gets the database,

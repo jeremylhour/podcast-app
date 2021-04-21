@@ -11,14 +11,14 @@ import yaml
 import vlc
 import time
 
-from podcastClasses import Podcast, Episode
-from playerOperations import stopListening, resumeListening, jumpTime
+from src.podcastClasses import Podcast, Episode
+from src.playerOperations import stopListening, resumeListening, jumpTime
 
 def main():
     args = docopt(__doc__)
 
     # Load podcast list :
-    config_file = '../subscriptions.yml'
+    config_file = 'subscriptions.yml'
     with open(config_file, 'r') as stream:
         config = yaml.safe_load(stream)
 
@@ -38,9 +38,14 @@ def main():
             newEpisode.displayInfos()
             player = vlc.MediaPlayer(newEpisode.audioUrl)
             player.play()
-            time.sleep(15)
-
+            while player.is_playing() == 1:
+                continue
 
 
 if __name__=='__main__':
    main()
+
+   a = 2
+   print(a)
+
+   prrrrr = Podcast('hello')

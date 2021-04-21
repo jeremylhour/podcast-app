@@ -14,7 +14,7 @@ from datetime import datetime
 
 from tinydb import Query
 
-from database import getDataBase
+from src.database import getDataBase
 
 
 # --------------------------

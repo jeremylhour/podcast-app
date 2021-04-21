@@ -14,7 +14,7 @@ from datetime import datetime
 
 import vlc
 
-from podcastClasses import Podcast, Episode
+from src.podcastClasses import Podcast, Episode
 
 # -------------------------------------- 
 # Functions to manage podcast and time,

@@ -22,7 +22,7 @@ setup(
     url = 'https://github.com/jlhourENSAE/podcast-app',
     author = "Jérémy L'Hour",
     license = 'MIT License',
-    packages = find_packages(),
+    packages = ['src'],
     install_requires = [req for req in requirements if req[:2] != "# "],
     entry_points = {
         'console_scripts': [
