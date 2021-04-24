@@ -3,6 +3,7 @@
 Usage:
     podcast ls
     podcast lastep <podcast_name>
+    podcast stop
           
 """
 from docopt import docopt
@@ -33,19 +34,18 @@ def main():
             podcast = Podcast(url)
             print(f'You have selected : {podcast.title}')
             history = podcast.getLastEpisode()
-            newEpisode = next(history)
 
+            # New episode
+            newEpisode = next(history)
             newEpisode.displayInfos()
             player = vlc.MediaPlayer(newEpisode.audioUrl)
-            player.play()
+            resumeListening(newEpisode, player)
             while player.is_playing() == 1:
                 continue
-
+            stopListening(newEpisode, player)
+    
+    if args['stop']:
+        pass
 
 if __name__=='__main__':
-   main()
-
-   a = 2
-   print(a)
-
-   prrrrr = Podcast('hello')
+    pass

@@ -71,10 +71,7 @@ if __name__=='__main__':
     with open(config_file, 'r') as stream:
         config = yaml.safe_load(stream)
         
-    for podcast in config['subscriptions']:
-        url = config['subscriptions'][podcast]
-        
-    podcast = Podcast(url)
+    podcast = Podcast(config['subscriptions']['Flagrant 2'])
     history = podcast.getLastEpisode()
     
     newEpisode = next(history)

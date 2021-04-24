@@ -16,7 +16,6 @@ from tinydb import Query
 
 from src.database import getDataBase
 
-
 # --------------------------
 # Object classes definitions
 # --------------------------
@@ -81,9 +80,8 @@ class Episode():
         displayInfos:
             print episode infos to the screen
         """
-        print('\n')
         print(f'Title : \n {self.title}')
-        print(f'Date : \n {self.date.strftime("%d/%m/%Y, %H:%M:%S")}')
+        print(f'Date : \n {self.date.strftime("%d %b %Y, %H:%M")}')
         print(f'Summary : \n {self.summary} \n')
 
     def toDict(self):
@@ -160,6 +158,7 @@ def _extractAudioUrl(feedEntry):
 
 
 if __name__=='__main__':
+    print(db_dir + db_file)
     print("="*80)
     print("THIS IS A TEST")
     print("="*80)
