@@ -52,7 +52,10 @@ def main():
                     sys.exit(0)
                 except SystemExit:
                     os._exit(0)
-    
+
+    if args['pastep']:
+        url = config['subscriptions'].get(args['<podcast_name>'])
+        
     if args['stop']:
         pass
 
