@@ -80,6 +80,7 @@ class Episode():
         displayInfos:
             print episode infos to the screen
         """
+        print('\n')
         print(f'Title : \n {self.title}')
         print(f'Date : \n {self.date.strftime("%d %b %Y, %H:%M")}')
         print(f'Summary : \n {self.summary} \n')

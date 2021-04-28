@@ -8,6 +8,8 @@ Usage:
 """
 from docopt import docopt
 
+import os
+import sys
 import yaml
 import vlc
 import time
@@ -26,7 +28,7 @@ def main():
     if args['ls']:
         podcasts = list(config['subscriptions'].keys())
         print('You are subscribed to the following podcasts :')
-        print(', '.join(podcasts))
+        print(', \n'.join(podcasts))
     
     if args['lastep']:
         url = config['subscriptions'].get(args['<podcast_name>'])
@@ -40,9 +42,16 @@ def main():
             newEpisode.displayInfos()
             player = vlc.MediaPlayer(newEpisode.audioUrl)
             resumeListening(newEpisode, player)
-            while player.is_playing() == 1:
-                continue
-            stopListening(newEpisode, player)
+            try:
+                while player.is_playing() == 1:
+                    continue
+                stopListening(newEpisode, player)
+            except KeyboardInterrupt:
+                stopListening(newEpisode, player)
+                try:
+                    sys.exit(0)
+                except SystemExit:
+                    os._exit(0)
     
     if args['stop']:
         pass
