@@ -85,6 +85,12 @@ class Episode():
         print(f'Date : \n {self.date.strftime("%d %b %Y, %H:%M")}')
         print(f'Summary : \n {self.summary} \n')
 
+        db = getDataBase()
+        User = Query()
+        result = db.get(User.audioUrl == self.audioUrl)
+        if result is None:
+            print(">> This is a new episode.")
+
     def toDict(self):
         """
         toDict:
@@ -109,10 +115,8 @@ class Episode():
         User = Query()
         result = db.get(User.audioUrl == self.audioUrl)
         if result is not None:
-            print("Episode found in the database. Loading timestamp.")
             self.updateTimestamp(result['timestamp'])
-        else:
-            print("This is a new episode.")
+        return None
 
     def saveToDataBase(self):
         """
@@ -159,7 +163,6 @@ def _extractAudioUrl(feedEntry):
 
 
 if __name__=='__main__':
-    print(db_dir + db_file)
     print("="*80)
     print("THIS IS A TEST")
     print("="*80)
@@ -175,8 +178,8 @@ if __name__=='__main__':
 
     print('Here is the most recent episode')
     newEpisode = next(history)
-    print(newEpisode.title)
+    newEpisode.displayInfos()
 
     print('Here is the second most recent episode')
     newEpisode2 = next(history)
-    print(newEpisode2.title)
+    newEpisode2.displayInfos()

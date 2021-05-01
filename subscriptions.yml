@@ -1,15 +1,14 @@
-
 ### This is the config file to manage subscriptions
 ### Each entry should have the format:
 ### Title: url to RSS feed
 
 subscriptions:
-    The Monday Morning Podcast: http://billburr.libsyn.com/rss
+    The Monday Morning Podcast: http://feeds.soundcloud.com/users/soundcloud:users:24758916/sounds.rss
     Flagrant 2: https://feeds.soundcloud.com/users/soundcloud:users:333121814/sounds.rss
     Barbell Medicine: https://feeds.soundcloud.com/users/soundcloud:users:284506821/sounds.rss
-    You Are Not So Smart: https://youarenotsosmart.com/rss-2/
+    You Are Not So Smart: https://youarenotsosmart.com/feed/
     Jocko Podcast: http://jockopodcast.libsyn.com/rss
 
 params:
-    database_dir: .database
-    database_file: read_episodes.json
+    DB_DIR: /home/pi/Documents/code/podcast-app/.database/
+    DB_FILE: read_episodes.json

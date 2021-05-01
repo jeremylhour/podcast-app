@@ -47,6 +47,7 @@ def resumeListening(episode, player):
     if player.is_playing()==0:
         player.play()
     player.set_time(episode.timestamp)
+    print(f'Duration of the episode : {player.get_length()}')
     time.sleep(2) # to give time to let the player resume
     return None
 
@@ -65,6 +66,22 @@ def jumpTime(player, jump=30):
         print('The podcast is not playing.')
     return None
 
+# -------------------------------------- 
+# Utils
+# --------------------------------------
+
+def msToHMS(duration : int):
+    """
+    msToHMS:
+        convert given to duration to a H:M:S format
+    
+    @param duration (int): duration to be converted
+    """
+    seconds = int((duration/1000)%60)
+    minutes = int((duration/(1000*60))%60)
+    hours = int((duration/(1000*60*60))%24)
+    return f"{hours}:{minutes}:{seconds}"
+
 
 if __name__=='__main__':
     config_file = 'subscriptions.yml'
@@ -75,11 +92,16 @@ if __name__=='__main__':
     history = podcast.getLastEpisode()
     
     newEpisode = next(history)
+    newEpisode.displayInfos()
+    print(newEpisode.audioUrl)
     
     # Play the podcast
     player = vlc.MediaPlayer(newEpisode.audioUrl)
-    player.play()
-    player.get_time()
+    resumeListening(newEpisode, player)
+    print(player.get_time())
+    time.sleep(10)
+
+    """
     player.set_time(15830)
     time.sleep(5)
     
@@ -88,3 +110,4 @@ if __name__=='__main__':
     
     jumpTime(player, jump=30)
     time.sleep(10)
+    """
